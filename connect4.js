@@ -110,7 +110,7 @@ function handleClick(evt) {
 
 	// check for tie
 	// TODO: check if all cells in board are filled; if so call, call endGame
-	if (checkEndGame()) {
+	if (checkForTie()) {
 		return endGame('Game Over! Tied!');
 	}
 
@@ -125,17 +125,22 @@ function switchPlayer(player) {
 }
 
 //check if all cells in board are filled, if so, return true
-function checkEndGame() {
-	for (let y = 0; y < HEIGHT; y++) {
-		for (let x = 0; x < WIDTH; x++) {
-			let cell = document.getElementById(`${y}-${x}`);
-			if (cell.children.length === 0) {
-				//console.dir(cell);
-				return false;
-			}
-		}
-	}
-	return true;
+function checkForTie() {
+	return board.every((row) => {
+		return row.every((cell) => {
+			return cell;
+		});
+	});
+
+	// for (let y = 0; y < HEIGHT; y++) {
+	// 	for (let x = 0; x < WIDTH; x++) {
+	// 		let cell = document.getElementById(`${y}-${x}`);
+	// 		if (cell.children.length === 0) {
+	// 			return false;
+	// 		}
+	// 	}
+	// }
+	// return true;
 }
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
