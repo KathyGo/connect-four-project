@@ -12,6 +12,7 @@ class Game {
 		this.player = [ player1, player2 ]; // active player: 1 or 2
 		this.currPlayer = player1;
 		this.board = []; // array of rows, each row is array of cells  (board[y][x])
+		this.boundHandleClick = this.handleClick.bind(this);
 		this.makeBoard();
 		this.makeHtmlBoard();
 		this.gameOver = false;
@@ -33,8 +34,9 @@ class Game {
 		// make column tops (clickable area for adding a piece to that column)
 		const top = document.createElement('tr');
 		top.setAttribute('id', 'column-top');
-		this.handleClick = this.handleClick.bind(this); // can I put this in constructor?
-		top.addEventListener('click', this.handleClick);
+		//this.handleClick = this.handleClick.bind(this);
+
+		top.addEventListener('click', this.boundHandleClick);
 		for (let x = 0; x < this.WIDTH; x++) {
 			const headCell = document.createElement('td');
 			headCell.setAttribute('id', x);
@@ -83,7 +85,7 @@ class Game {
 	endGame(msg) {
 		alert(msg);
 		const top = document.getElementById('column-top');
-		top.removeEventListener('click', this.handleClick);
+		top.removeEventListener('click', this.boundHandleClick);
 		this.gameOver = true;
 	}
 
@@ -91,7 +93,7 @@ class Game {
 	handleClick(evt) {
 		// get x from ID of clicked cell
 		const x = +evt.target.id;
-		//console.log('THIS IS: ', this);
+		//	console.log('THIS IS: ', this);
 		// get next spot in column (if none, ignore click)
 		const y = this.findSpotForCol(x);
 		if (y === null) {
@@ -163,10 +165,14 @@ function func() {
 	document.getElementById('startgame').addEventListener('click', function(event) {
 		const color1 = document.querySelector('#player1').value;
 		const color2 = document.querySelector('#player2').value;
-		const player1 = new Player(color1);
-		const player2 = new Player(color2);
-		new Game(6, 7, player1, player2);
-		document.querySelector('#player1').value = '';
-		document.querySelector('#player2').value = '';
+		if (color1 === color2) {
+			alert('Please choose different color!');
+		} else {
+			const player1 = new Player(color1);
+			const player2 = new Player(color2);
+			new Game(6, 7, player1, player2);
+			document.querySelector('#player1').value = '';
+			document.querySelector('#player2').value = '';
+		}
 	});
 }
